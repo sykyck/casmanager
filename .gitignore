@@ -1,0 +1,4 @@
+cas-mgr.pro.user
+installer/cas-mgr
+installer/cas-mgr*.bin
+installer/cas-mgr*.tar.gz

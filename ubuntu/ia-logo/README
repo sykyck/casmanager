@@ -1,0 +1,7 @@
+# How to install theme
+sudo cp -r ia-logo /lib/plymouth/themes/
+cd /lib/plymouth/themes
+sudo update-alternatives --install /lib/plymouth/themes/default.plymouth default.plymouth /lib/plymouth/themes/ia-logo/ia-logo.plymouth 100
+sudo update-alternatives --config default.plymouth
+# Choose ia-logo from menu
+sudo update-initramfs -u

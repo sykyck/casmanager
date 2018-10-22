@@ -1,0 +1,33 @@
+Customer password for web service:
+Cp7Fa9cSwGkHGCw5YqRMgRrRzeCChTsx
+
+Encryption key for database:
+67nXm6j28tP888upQMrwucyB2cZnA9FS
+
+Encryption key for software updates:
+dN9523^W54h6^vc6wu^8Rhuj$ma%*jbn
+
+
+
+CouchDB _design/app
+{
+   "_id": "_design/app",
+   "language": "javascript",
+   "views": {
+       "allCards": {
+           "map": "function(doc) { if (doc.type == 'card') emit(doc._id, {'_rev':doc._rev, 'credits':doc.credits, 'in_use':doc.in_use, 'last_device_num':doc.last_device_num, 'last_active':doc.last_active, 'activated':doc.activated, 'card_type':doc.card_type}); }"
+       },
+       "lookupUser": {
+           "map": "function(doc) { if (doc.type == 'user') { emit([doc._id, doc.password], doc); } }"
+       },
+       "allUsers": {
+           "map": "function(doc) { if (doc.type == 'user') emit(doc._id, doc._rev); }"
+       },
+       "getExpiredCards": {
+           "map": "function(doc) {\n  if (doc.type == 'card') {\n    var lastActive = doc.last_active || doc.activated;\n    // Replace dash with slash since this version of JavaScript will not parse\n    // a date with this separator\n    lastActive = Date.parse(lastActive.replace(/-/g, '/'));\n    // Current time - 30 days\n    var expirationDate = Date.now() - 30 * 24 * 60 * 60 * 1000;\n    if (lastActive <= expirationDate && doc.card_type != 14) {\n      emit(doc._id, doc);\n    }\n  }\n}"
+       },
+       "getBoothStatus": {
+           "map": "function(doc) {\n  if (doc.type == 'booth_status') {\n      emit(doc._id, doc);\n  }\n}"
+       }
+   }
+}
